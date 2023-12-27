@@ -20,7 +20,7 @@ document
     //   "Content-Type": "application/json", // Set the content type based on your needs
     // };
 
-    async function storeDataToBackend(callbck) {
+    async function storeDataToBackend() {
       let res = await axios.post(
         "https://crudcrud.com/api/8ef90ec50afb4d04bfcd67a3636243cd/appointmentData",
         submittedData
@@ -39,6 +39,14 @@ window.addEventListener("DOMContentLoaded", async function displayData() {
   );
 
   console.log("received data: ", res.data);
+
+  document.addEventListener("click", function (event) {
+    if (event.target.classList.contains("delete")) {
+      // If the clicked element has the "delete" class, handle the deletion
+      event.preventDefault();
+      deleteAppointment(event.target);
+    }
+  });
 
   res.data.forEach((ele) => {
     // Create a new <li> element
@@ -60,7 +68,29 @@ window.addEventListener("DOMContentLoaded", async function displayData() {
     listItem.appendChild(deleteBtn);
     //Append the Edit button to the <li> element
     listItem.appendChild(editBtn);
+
+    listItem.dataset.appointmentId = ele._id;
     // Append the <li> element to the <ul>
     items.appendChild(listItem);
   });
 });
+
+// Function to delete an appointment
+async function deleteAppointment(deleteButton) {
+  try {
+    // Assuming your delete button is within a list item, find the closest list item
+    const listItem = deleteButton.parentElement;
+    // Extract the appointment ID from the list item
+    const appointmentId = listItem.dataset.appointmentId;
+
+    // Make a DELETE request using Axios
+    await axios.delete(
+      `https://crudcrud.com/api/8ef90ec50afb4d04bfcd67a3636243cd/appointmentData/${appointmentId}`
+    );
+
+    // Remove the deleted item from the UI
+    listItem.remove();
+  } catch (error) {
+    console.error("Error deleting appointment:", error);
+  }
+}
