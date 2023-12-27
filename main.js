@@ -26,13 +26,13 @@ document
         submittedData
         // { headers }
       );
-      displayData();
+      //   displayData();
       console.log("Stored Data :", res.data);
     }
-    storeDataToBackend(displayData);
+    storeDataToBackend();
   });
 
-async function displayData() {
+window.addEventListener("DOMContentLoaded", async function displayData() {
   //get data from the back-end(crudcrud.com)
   let res = await axios.get(
     "https://crudcrud.com/api/8ef90ec50afb4d04bfcd67a3636243cd/appointmentData"
@@ -63,4 +63,4 @@ async function displayData() {
     // Append the <li> element to the <ul>
     items.appendChild(listItem);
   });
-}
+});
